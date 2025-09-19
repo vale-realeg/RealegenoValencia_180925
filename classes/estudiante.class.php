@@ -10,9 +10,9 @@ class Estudiante{
     public $conexion;
     public $validacion;
 
-    public function _construct(){
+    public function __construct(){
         $this->conexion = new DB();
-        $this->validacion = new Validaciones();
+        $this->validacion =new Validaciones();
     }
 
     public function setIdEstudiante($idestudiante){
@@ -47,48 +47,47 @@ class Estudiante{
         return $this->idgenero;
     }
 
-    //METODO PARA OBTENER TODOS LOS ESTUDIANTES
+    //Metodo para obtener todos los estudiantes
     public function obtenerEstudiantes(){
         $resultado = $this->conexion->run('SELECT * FROM estudiante;');
-        $array = array("mensaje"=>"Registros Encontrados", "data"=>$resultado->fetchAll());
+        $array = array("mensaje"=>"Registros encontrados", "data"=>$resultado->fetchAll());
         return $array;
-
     }
 
     //METODO PARA OBTENER UN ESTUDIANTE
     public function obtenerEstudiante(int $idestudiante){
         if($idestudiante > 0){
-        $resultado = $this->conexion->run('SELECT * FROM estudiante WHERE id_estudiante='.$idestudiante);
-        $array = array("mensaje"=>"Registros Encontrados","data"->$resultado->fetch());
-        return $array;
-        }else{
-            $array = array("mensaje"=>"Registros NO Encontrados, identificador incorrecto","data"=>"");
+            $resultado =$this->conexion->run('SELECT * FROM estudiante WHERE id_estudiante='.$idestudiante);
+            $array = array("mensaje"=>"Registros encontrados","data"=>$resultado->fetch());
             return $array;
+            }else{
+                $array = array("mensaje"=>"Registros NO encontrados, identificador incorrecto","data"=>"");
+                return $array;
+            }
         }
-    } 
-    
-    public function nuevoEstudiante($fechanacimiento,$idgenero){
+
+    public function nuevoEstudiante($fechanacimiento,$idestudiante){
         if(!empty($idgenero) && !empty($fechanacimiento)){
-            //VARIABLE DE TIPO ARRAY PARA ENVIAR PARAMETROS A LA BASE DE DATOS
+            //VARIABLE DEL TIPO ARRAY PARA ENVIAR PARAMETROS A LA BASE DE DATOS
             $parametros = array(
                 "fecha_nac" => $fechanacimiento,
                 "id_genero" => $idgenero
             );
 
-            $resultado = $this->conexion->run('INSERT INTO estudiante(fecha_nacimiento_estudiante,id_genero)VALUES(:fecha_nac,:id_genero);',$parametros);
-            if($this->conexion->n > 0 and $this->conexion->id > 0){
-                $resultado - $this->obtenerEstudiante($this->conexion->id);
-                $array = array("mensaje"=>"Registros Encontrados","data"=>$resultado["data"]);
+        $resultado = $this->conexion->run('INSERT INTO estudiante(fecha_nacimiento_estudiante,id_genero)VALUES(fecha_nac,:id_genero);',$parametros);
+        if($this->conexion->n > 0 and $this->conexion->id > 0){
+            $resultado = $this->obtenerEstudiante($this->conexion->id);
+            $array = array("mensaje"=>"Registros encontrados","data"=>$resultado["data"]);
             return $array;
             }else{
-            $array = array("mensaje"=>"Hubo un problema al registrar el estudiante","data"=>"");
-            return $array;
+                $array = array("mensaje"=>"Hubo un problema al registrar el estudiante","data"=>"");
+                return $array;
             }
-            }else{
-                $array = array("mensaje"=>"Parametros enviados vacios","data"=>"");
-                return $array;   
-            
+        }else{
+            $array = array("mensaje"=>"Parametros enviados vacios", "data"=>"");
+            return $array;
         }
     }
+
+    
 }
-?>
