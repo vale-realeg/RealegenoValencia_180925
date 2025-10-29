@@ -15,7 +15,7 @@ if($_SERVER["REQUEST_METHOD"]=="GET"){
     }
 }elseif ($_SERVER["REQUEST_METHOD"]=="POST") {
     if(isset($_POST["fecha_nac"]) and isset($_POST["id_genero"])){
-        $resultado = $Estudiantes->nuevoEstudiante($_POST["fecha_nac"],$_POST["id_genero"]);
+        $resultado = $Estudiantes->nuevoEstudiante($_POST["fnac"],$_POST["idg"]);
     }else{
         header('HTTP/1.1 400 Bad Request');
         $resultado = array("mensaje"=>"Parametros no Enviados");
