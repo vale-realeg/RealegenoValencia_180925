@@ -1,29 +1,31 @@
 <?php
 require("classes/estudiante.class.php");
-$Estudiantes = new Estudiante();
+$Estudiante = new Estudiante();
 
-//VARIABLE ESTUDIANTE
 $resultado = [];
 
 if($_SERVER["REQUEST_METHOD"]=="GET"){
-    $tipo_peticion = ((isset($_GET["t"])) ?($_GET["t"]) : null);
-
-    if($tipo_peticion=="selectAll"){
-        $resultado = $Estudiantes->obtenerEstudiantes();
+    $tipo_peticion = ( (isset($_GET["t"])) ? ($_GET["t"]) : null );
+    
+    if($tipo_peticion == "selectAll"){
+    $resultado = $Estudiante->obtenerEstudiantes();
     }else{
         $resultado = [];
     }
-}elseif ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+}elseif($_SERVER["REQUEST_METHOD"]=="POST"){
     if(isset($_POST["fecha_nac"]) and isset($_POST["id_genero"])){
-        $resultado = $Estudiantes->nuevoEstudiante($_POST["fnac"],$_POST["idg"]);
+        $resultado = $Estudiante->nuevoEstudiante($_POST["fecha_nac"], $_POST["id_genero"]);
     }else{
         header('HTTP/1.1 400 Bad Request');
-        $resultado = array("mensaje"=>"Parametros no Enviados");
+        $resultado = array("mensaje"=>"Parametros no enviados");
     }
 }
 
-//$resultado = $Estudiantes->obtenerEstudiantes();
+
+
 
 header("Content-Type: Application/json");
 echo(json_encode($resultado));
+
 ?>
